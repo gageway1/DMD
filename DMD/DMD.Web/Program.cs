@@ -1,5 +1,4 @@
 using DMD.Domain;
-using DMD.Domain.DataStores;
 using DMD.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,12 +11,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add mediatr
-
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DomainMarker).Assembly));
 
 // services
 
-//builder.Services.AddSingleton<IBandService, BandService>();
+// TODO: remember how to automate this. there's a way to do this quick with mediatr using reflection or something, 
+// i just don't remember how to do it right now
+builder.Services.AddSingleton<IBandService, BandService>();
 
 var app = builder.Build();
 
