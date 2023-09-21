@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMD.Web", "DMD.Web\DMD.Web.csproj", "{EDC85C14-793B-443E-B223-16C161A28681}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMD.Domain", "DMD.Services\DMD.Domain.csproj", "{181459F5-43A9-47B1-92A7-216197C7A831}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDC85C14-793B-443E-B223-16C161A28681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC85C14-793B-443E-B223-16C161A28681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC85C14-793B-443E-B223-16C161A28681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC85C14-793B-443E-B223-16C161A28681}.Release|Any CPU.Build.0 = Release|Any CPU
+		{181459F5-43A9-47B1-92A7-216197C7A831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{181459F5-43A9-47B1-92A7-216197C7A831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{181459F5-43A9-47B1-92A7-216197C7A831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{181459F5-43A9-47B1-92A7-216197C7A831}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C76DDD24-CC10-4E35-8252-D45907E85E7A}
+	EndGlobalSection
+EndGlobal
