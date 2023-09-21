@@ -1,0 +1,9 @@
+1. Impl ILogger<T> partial class overload method for logging
+2. Impl AutoMapper
+3. Impl auth scheme of some kind - not sure yet
+4. Impl unit testing - xunit, fluent assertions, etc
+5. Impl some command to create a band and in that command impl validation
+6. do i care about versioned api right now? no, probably not, this is a proof of concept
+7. agnostic to data access but make it easy to add things like EF, blobstorage, etc, with a couple implementation exmpls
+8. impl keyvault, make some secrets up for examples, set them up in appsettings.json, have them injected in at startup, use them somewhere
+9. following the above, impl IOptions pattern using some keyvault keys to show how options can be easily utilized to make services configurable

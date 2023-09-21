@@ -15,9 +15,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(Dom
 
 // services
 
-// TODO: remember how to automate this. there's a way to do this quick with mediatr using reflection or something, 
-// i just don't remember how to do it right now
-builder.Services.AddSingleton<IBandService, BandService>();
+builder.Services.AddBandService();
 
 var app = builder.Build();
 
