@@ -17,6 +17,7 @@ namespace DMD.Common
 
             services.AddOptions<TOptions>()
                 .Bind(configuration.GetSection(settingsName))
+                // TODO: my options validator is not doing the whole validation thing. look into this. it's seemingly binding nonexistent appsettings sections. why?
                 .ValidateByDataAnnotation(settingsName);
 
             services.Configure<TOptions>(o => configuration.GetSection(settingsName));
