@@ -14,8 +14,12 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DomainMarker).Assembly));
 
 // services
+// TODO: logger isnt working. wtf msft
+LoggerFactory loggerFactory = new();
+ILogger _domainLogger = loggerFactory.CreateLogger<Program>();
+builder.Services.AddSingleton(typeof(ILogger), _domainLogger);
 
-builder.Services.AddBandService();
+builder.Services.AddBandService(builder.Configuration);
 
 var app = builder.Build();
 

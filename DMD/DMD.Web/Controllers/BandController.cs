@@ -20,5 +20,11 @@ namespace DMD.Web.Controllers
         {
             return await _mediator.Send(new GetAllBandsRequest());
         }
+
+        [HttpGet("/getBandByName")]
+        public async Task<Domain.Models.Band> GetBandByNameAsync([FromQuery] string name)
+        {
+            return await _mediator.Send(new GetBandByNameRequest(name));
+        }
     }
 }
