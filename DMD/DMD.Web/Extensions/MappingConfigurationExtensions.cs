@@ -6,14 +6,14 @@ namespace DMD.Web.Extensions
 {
     public static class MappingConfigurationExtensions
     {
-        public static IServiceCollection AddMapping(this IServiceCollection s)
+        public static IServiceCollection AddMapping(this IServiceCollection services)
         {
             TinyMapperExtensions.BindForEnumerables<Domain.Models.Band, Band>();
             TinyMapperExtensions.BindForEnumerables<Domain.Models.Album, Album>();
             TinyMapperExtensions.BindForEnumerables<Domain.Models.BandMember, BandMember>();
             TinyMapperExtensions.BindForEnumerables<Domain.Models.Song, Song>();
 
-            return s;
+            return services;
         }
     }
 

@@ -1,10 +1,5 @@
-﻿using DMD.Domain.Models;
-using DMD.Domain.Queries;
-using DMD.Domain.Services;
+﻿using DMD.Domain.Queries;
 using DMD.Domain.Validators;
-using FluentAssertions;
-using MediatR;
-using Moq;
 using FluentValidation.TestHelper;
 
 
@@ -17,6 +12,14 @@ namespace DMD.Test.ValidatorTests
         public BandRequestValidatorTests()
         {
             _validator = new GetBandByNameRequestValidator();
+        }
+
+        [Fact]
+        public async Task Validator_Throws_TooLongOfRequestParam()
+        {
+            string longstr = new('.', 101);
+            TestValidationResult<GetBandByNameRequest> result = await _validator.TestValidateAsync(new GetBandByNameRequest(longstr));
+            result.ShouldHaveValidationErrorFor(p => p.Name);
         }
 
         [Theory]
