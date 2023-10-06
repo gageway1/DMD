@@ -1,3 +1,5 @@
+using Nelibur.ObjectMapper;
+
 namespace DMD.Web.Models
 {
     public class Band : ModelBase

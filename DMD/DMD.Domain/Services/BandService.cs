@@ -10,25 +10,25 @@ namespace DMD.Domain.Services
     {
         private readonly BandDataStore _bandDataStore = new();
         private readonly IOptions<BandOptions> _options;
-        private readonly Logger _logger;
+        private readonly ILogger<BandService> _logger;
 
-        public BandService(IOptions<BandOptions> options, ILogger logger)
+        public BandService(IOptions<BandOptions> options, ILogger<BandService> logger)
         {
             _options = options;
-            Console.WriteLine($"Options!: {nameof(options.Value.ApiKey)}{options.Value.ApiKey}\n\n{nameof(options.Value.TenantId)}{options.Value.TenantId}");
-            _logger = new Logger(logger);
+            _logger = logger;
+            _logger.LogInformation($"Options!:\n[{nameof(options.Value.ApiKey)}] | {options.Value.ApiKey}\n[{nameof(options.Value.TenantId)}] | {options.Value.TenantId}");
         }
 
         public async Task<Band> GetBandByNameAsync(string bandName, CancellationToken cancellationToken)
         {
             try
             {
-                _logger.GetThingError("This is a log message!");
-                return await Task.FromResult(_bandDataStore.Bands.First(name => name.Equals(bandName)));
+                return await Task.FromResult(_bandDataStore.Bands.First(band => band.Name.ToLower().Equals(bandName.ToLower())));
             }
-            catch (Exception)
+            catch
             {
-                throw; // error handling later, partial class DI ILogger<T> method with overloads
+                _logger.LogError($"Couldn't get band [{bandName}] from the datastore.");
+                throw;
             }
         }
 
@@ -36,7 +36,6 @@ namespace DMD.Domain.Services
         {
             try
             {
-                _logger.GetThingError("This is a log message!");
                 return await Task.FromResult(_bandDataStore.Bands.ToList());
             }
             catch (Exception)
@@ -45,18 +44,4 @@ namespace DMD.Domain.Services
             }
         }
     }
-
-    internal sealed partial class Logger
-    {
-        private readonly ILogger _logger;
-
-        public Logger(ILogger logger)
-        {
-            _logger = logger;
-        }
-
-        [LoggerMessage(1, LogLevel.Error, "Oh no! We couldn't get [{thing}]!")]
-        internal partial void GetThingError(string thing);
-    }
-
 }

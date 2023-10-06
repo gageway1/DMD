@@ -1,6 +1,8 @@
 using DMD.Domain.Queries;
+using DMD.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Nelibur.ObjectMapper;
 
 namespace DMD.Web.Controllers
 {
@@ -9,22 +11,26 @@ namespace DMD.Web.Controllers
     public class BandController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<BandController> _logger;
 
-        public BandController(IMediator meditor)
+        public BandController(IMediator meditor, ILogger<BandController> logger)
         {
             _mediator = meditor;
+            _logger = logger;
         }
 
         [HttpGet("/getAllBands")]
-        public async Task<List<Domain.Models.Band>> GetAllBandsAsync()
+        public async Task<List<Band>> GetAllBandsAsync()
         {
-            return await _mediator.Send(new GetAllBandsRequest());
+            _logger.LogInformation("Called bands/getAllBands");
+            return TinyMapper.Map<List<Domain.Models.Band>, List<Band>>(await _mediator.Send(new GetAllBandsRequest()));
         }
 
         [HttpGet("/getBandByName")]
-        public async Task<Domain.Models.Band> GetBandByNameAsync([FromQuery] string name)
+        public async Task<Band> GetBandByNameAsync([FromQuery] string name)
         {
-            return await _mediator.Send(new GetBandByNameRequest(name));
+            _logger.LogInformation("Called bands/getBandByName");
+            return TinyMapper.Map<Domain.Models.Band, Band>(await _mediator.Send(new GetBandByNameRequest(name)));
         }
     }
 }

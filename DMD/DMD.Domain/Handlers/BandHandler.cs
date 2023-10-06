@@ -5,7 +5,7 @@ using MediatR;
 
 namespace DMD.Domain.Handlers
 {
-    public class BandHandler :
+    public class BandHandler : 
         IRequestHandler<GetAllBandsRequest, List<Band>>,
         IRequestHandler<GetBandByNameRequest, Band>
     {

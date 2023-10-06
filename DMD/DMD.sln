@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMD.Web", "DMD.Web\DMD.Web.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMD.Domain", "DMD.Domain\DMD.Domain.csproj", "{181459F5-43A9-47B1-92A7-216197C7A831}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMD.Common", "DMD.Common\DMD.Common.csproj", "{17A01C1F-DE00-4850-8D2F-DFB47427D3A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMD.Common", "DMD.Common\DMD.Common.csproj", "{17A01C1F-DE00-4850-8D2F-DFB47427D3A5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89D73ADE-6EE3-4D2A-AFD6-780D4D37C49F}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

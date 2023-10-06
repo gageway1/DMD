@@ -1,39 +1,75 @@
 using DMD.Domain;
-using DMD.Domain.Services;
+using DMD.Domain.Middleware;
+using DMD.Web.Extensions;
+using FluentValidation;
+using MediatR;
+using Serilog;
+using Serilog.Sinks.SystemConsole.Themes;
+using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Add mediatr
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DomainMarker).Assembly));
-
-// services
-// TODO: logger isnt working. wtf msft
-LoggerFactory loggerFactory = new();
-ILogger _domainLogger = loggerFactory.CreateLogger<Program>();
-builder.Services.AddSingleton(typeof(ILogger), _domainLogger);
-
-builder.Services.AddBandService(builder.Configuration);
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    public static void Main(string[] args)
+    {
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+        // logger
+        builder.UseSerilog((builder, configuration) => configuration
+            .WriteTo.Console(Serilog.Events.LogEventLevel.Debug, theme: AnsiConsoleTheme.Code)
+            .WriteTo.File("logging/log.txt", Serilog.Events.LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .ReadFrom.Configuration(builder.Configuration));
+
+        // Add services to the container.
+        builder.Services.AddControllers();
+
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        // Add mediatr
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DomainMarker).Assembly));
+
+        // add request validation
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        builder.Services.AddValidatorsFromAssembly(typeof(DomainMarker).Assembly);
+        builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+
+        // domain services
+        builder.Services.AddDomainServices(builder.Configuration);
+
+        // mapping configuration
+        builder.Services.AddMapping();
+
+        WebApplication app = builder.Build();
+
+        app.Logger.LogInformation("Listening on:");
+        foreach (string url in Environment.GetEnvironmentVariable("ASPNETCORE_URLS")!.Split(";"))
+        {
+            app.Logger.LogInformation(url);
+        }
+
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.Logger.LogInformation("App is in development mode");
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+        app.Logger.LogInformation("Running application");
+
+        app.Run();
+
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
