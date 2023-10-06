@@ -8,6 +8,8 @@ namespace DMD.Web.Controllers
 {
     [ApiController]
     [Route("api/bands")]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(500)]
     public class BandController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -20,6 +22,7 @@ namespace DMD.Web.Controllers
         }
 
         [HttpGet("/getAllBands")]
+        [ProducesResponseType(typeof(List<Band>), 200)]
         public async Task<List<Band>> GetAllBandsAsync()
         {
             _logger.LogInformation("Called bands/getAllBands");
@@ -27,6 +30,8 @@ namespace DMD.Web.Controllers
         }
 
         [HttpGet("/getBandByName")]
+        [ProducesResponseType(typeof(Band), 200)]
+        [ProducesResponseType(400)]
         public async Task<Band> GetBandByNameAsync([FromQuery] string name)
         {
             _logger.LogInformation("Called bands/getBandByName");
