@@ -1,6 +1,6 @@
-﻿namespace DMD.Domain.Models
+﻿namespace DMD.Data.Models
 {
-    public class Song : ModelBase
+    public class DbSong : DbModelBase
     {
         public string Name { get; set; } = string.Empty;
         public TimeSpan Length { get; set; }

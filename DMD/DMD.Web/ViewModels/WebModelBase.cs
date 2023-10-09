@@ -1,6 +1,6 @@
-﻿namespace DMD.Domain.Models
+﻿namespace DMD.Web.Models
 {
-    public abstract class ModelBase
+    public abstract class WebModelBase
     {
         public Guid Id { get; init; } = Guid.NewGuid();
         public DateTimeOffset CreatedOn { get; init; } = DateTimeOffset.UtcNow;

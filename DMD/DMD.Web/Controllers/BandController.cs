@@ -1,15 +1,16 @@
-using DMD.Domain.Queries;
+using DMD.Domain.Requests;
 using DMD.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Nelibur.ObjectMapper;
+using System.Net;
 
 namespace DMD.Web.Controllers
 {
     [ApiController]
     [Route("api/bands")]
-    [ProducesResponseType(401)]
-    [ProducesResponseType(500)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     public class BandController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -22,20 +23,38 @@ namespace DMD.Web.Controllers
         }
 
         [HttpGet("/getAllBands")]
-        [ProducesResponseType(typeof(List<Band>), 200)]
+        [ProducesResponseType(typeof(List<Band>), (int)HttpStatusCode.OK)]
         public async Task<List<Band>> GetAllBandsAsync()
         {
             _logger.LogInformation("Called bands/getAllBands");
-            return TinyMapper.Map<List<Domain.Models.Band>, List<Band>>(await _mediator.Send(new GetAllBandsRequest()));
+            return TinyMapper.Map<List<Data.Models.DbBand>, List<Band>>(await _mediator.Send(new GetAllBandsRequest()));
         }
 
         [HttpGet("/getBandByName")]
-        [ProducesResponseType(typeof(Band), 200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(Band), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<Band> GetBandByNameAsync([FromQuery] string name)
         {
             _logger.LogInformation("Called bands/getBandByName");
-            return TinyMapper.Map<Domain.Models.Band, Band>(await _mediator.Send(new GetBandByNameRequest(name)));
+            return TinyMapper.Map<Data.Models.DbBand, Band>(await _mediator.Send(new GetBandByNameRequest(name)));
+        }
+
+        [HttpPost("/createBand")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<Band> CreateBandAsync([FromBody] CreateBandRequest request)
+        {
+            _logger.LogInformation("Called bands/createBand");
+            return TinyMapper.Map<Data.Models.DbBand, Band>(await _mediator.Send(request));
+        }
+
+        [HttpPut("/modifyBand")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<Band> ModifyBandAsync([FromBody] ModifyBandRequest request)
+        {
+            _logger.LogInformation("Called bands/modifyBand");
+            return TinyMapper.Map<Data.Models.DbBand, Band>(await _mediator.Send(request));
         }
     }
 }

@@ -1,6 +1,6 @@
-﻿namespace DMD.Domain.Models
+﻿namespace DMD.Data.Models
 {
-    public class BandMember : ModelBase
+    public class DbBandMember : DbModelBase
     {
         public string Instrument { get; set; } = string.Empty;
     }

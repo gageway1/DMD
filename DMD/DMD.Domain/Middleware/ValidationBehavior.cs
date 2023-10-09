@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using DMD.Domain.Validation;
+using FluentValidation;
 using MediatR;
 using System.Text;
 
@@ -10,6 +11,19 @@ namespace DMD.Domain.Middleware
         private readonly IEnumerable<IValidator<TRequest>> _validators;
 
         public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
+
+        public async Task<TResponse> Handle(IValidatableRequest<TResponse> request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        {
+            var validationResult = request.Validate();
+            var failures = validationResult.Errors.Where(x => x != null).ToList();
+
+            if (failures.Any())
+            {
+                throw new ValidationException(failures);
+            }
+
+            return await next();
+        }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {

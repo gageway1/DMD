@@ -1,6 +1,6 @@
 ﻿namespace DMD.Web.Models
 {
-    public class BandMember : ModelBase
+    public class BandMember : WebModelBase
     {
         public string Instrument { get; set; } = string.Empty;
     }

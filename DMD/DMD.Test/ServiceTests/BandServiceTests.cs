@@ -1,10 +1,11 @@
 using Microsoft.Extensions.Logging;
 using DMD.Domain.Configuration;
-using DMD.Domain.Models;
+using DMD.Data;
 using DMD.Domain.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Options;
 using Moq;
+using DMD.Data.Models;
 
 namespace DMD.Test.ServiceTests
 {
@@ -12,6 +13,7 @@ namespace DMD.Test.ServiceTests
     {
         private readonly IBandService _bandService;
         private readonly Mock<ILogger<BandService>> _logger;
+        private readonly Mock<DMDContext> _context;
 
         public BandServiceTests()
         {
@@ -19,9 +21,11 @@ namespace DMD.Test.ServiceTests
             _logger = new Mock<ILogger<BandService>>();
             ILogger<BandService> logger = _logger.Object;
 
+            _context = new Mock<DMDContext>();
+
             IOptions<BandOptions> options = Options.Create(new BandOptions());
 
-            _bandService = new BandService(options, logger);
+            _bandService = new BandService(options, logger, _context.Object);
         }
 
         [Fact]
@@ -30,7 +34,7 @@ namespace DMD.Test.ServiceTests
             // setup
 
             // act
-            List<Band> result = await _bandService.GetAllBandsAsync(CancellationToken.None);
+            List<DbBand> result = await _bandService.GetAllBandsAsync(CancellationToken.None);
 
             // assert
             result.Should().NotBeNull();
@@ -44,7 +48,7 @@ namespace DMD.Test.ServiceTests
             string bandName = "metallica";
 
             // act
-            Band result = await _bandService.GetBandByNameAsync(bandName, CancellationToken.None);
+            DbBand result = await _bandService.GetBandByNameAsync(bandName, CancellationToken.None);
 
             // assert
             result.Should().NotBeNull();

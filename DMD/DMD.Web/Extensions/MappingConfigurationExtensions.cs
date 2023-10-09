@@ -1,4 +1,5 @@
-﻿using DMD.Web.Models;
+﻿using DMD.Data.Models;
+using DMD.Web.Models;
 using Nelibur.ObjectMapper;
 using Nelibur.ObjectMapper.Bindings;
 
@@ -8,10 +9,10 @@ namespace DMD.Web.Extensions
     {
         public static IServiceCollection AddMapping(this IServiceCollection services)
         {
-            TinyMapperExtensions.BindForEnumerables<Domain.Models.Band, Band>();
-            TinyMapperExtensions.BindForEnumerables<Domain.Models.Album, Album>();
-            TinyMapperExtensions.BindForEnumerables<Domain.Models.BandMember, BandMember>();
-            TinyMapperExtensions.BindForEnumerables<Domain.Models.Song, Song>();
+            TinyMapperExtensions.BindForEnumerables<DbBand, Band>();
+            TinyMapperExtensions.BindForEnumerables<DbAlbum, Album>();
+            TinyMapperExtensions.BindForEnumerables<DbBandMember, BandMember>();
+            TinyMapperExtensions.BindForEnumerables<DbSong, Song>();
 
             return services;
         }

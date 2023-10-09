@@ -3,8 +3,6 @@ using DMD.Domain.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DMD.Common;
-using Microsoft.Extensions.Logging;
-using Nelibur.ObjectMapper;
 
 namespace DMD.Domain
 {
@@ -14,7 +12,7 @@ namespace DMD.Domain
         {
             // add your services and options for those services here!!!
             services.AddOptions<BandOptions>(configuration, BandOptions.SettingsName);
-            services.AddSingleton<IBandService, BandService>();
+            services.AddScoped<IBandService, BandService>();
 
             return services;
         }

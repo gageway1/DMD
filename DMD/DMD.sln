@@ -12,9 +12,12 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89D73ADE-6EE3-4D2A-AFD6-780D4D37C49F}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		readme.md = readme.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DMD.Test", "DMD.Test\DMD.Test.csproj", "{5802EA39-F91D-45FD-BA81-CC967E2A6141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMD.Test", "DMD.Test\DMD.Test.csproj", "{5802EA39-F91D-45FD-BA81-CC967E2A6141}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DMD.Data", "DMD.Data\DMD.Data.csproj", "{8CE4D838-74FC-4B58-8DC4-4836A4512486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +41,10 @@ Global
 		{5802EA39-F91D-45FD-BA81-CC967E2A6141}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5802EA39-F91D-45FD-BA81-CC967E2A6141}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5802EA39-F91D-45FD-BA81-CC967E2A6141}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CE4D838-74FC-4B58-8DC4-4836A4512486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CE4D838-74FC-4B58-8DC4-4836A4512486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CE4D838-74FC-4B58-8DC4-4836A4512486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CE4D838-74FC-4B58-8DC4-4836A4512486}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

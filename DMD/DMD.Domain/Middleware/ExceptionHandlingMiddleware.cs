@@ -1,7 +1,10 @@
-﻿using FluentValidation;
+﻿using DMD.Data.Exceptions;
+using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Net;
+using System.Net.Http;
 using System.Text.Json;
 
 namespace DMD.Domain.Middleware
@@ -28,7 +31,7 @@ namespace DMD.Domain.Middleware
 
         private static async Task HandleExceptionAsync(HttpContext httpContext, Exception exception)
         {
-            var statusCode = GetStatusCode(exception);
+            var statusCode = GetStatusCode(exception, httpContext);
 
             var response = new
             {
@@ -45,16 +48,22 @@ namespace DMD.Domain.Middleware
             await httpContext.Response.WriteAsync(JsonSerializer.Serialize(response));
         }
 
-        private static int GetStatusCode(Exception exception) =>
+        private static int GetStatusCode(Exception exception, HttpContext context) =>
             exception switch
             {
-                _ => StatusCodes.Status500InternalServerError
+                ValidationException => (int)HttpStatusCode.BadRequest,
+                NotFoundInDbOkException => (int)HttpStatusCode.OK,
+                BandNotFoundException => (int)HttpStatusCode.NotFound,
+                _ => (int)HttpStatusCode.InternalServerError
             };
 
         private static string GetTitle(Exception exception) =>
             exception switch
             {
                 ApplicationException applicationException => applicationException.Source ?? "[No Source Found]",
+                ValidationException => "[Bad Request]",
+                NotFoundInDbOkException => "[No entry found]",
+                BandNotFoundException => "[No band found]",
                 _ => "Server Error"
             };
 

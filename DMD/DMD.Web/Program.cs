@@ -1,11 +1,12 @@
+using DMD.Data;
 using DMD.Domain;
 using DMD.Domain.Middleware;
 using DMD.Web.Extensions;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
-using System.Text;
 
 class Program
 {
@@ -20,6 +21,10 @@ class Program
             .Enrich.FromLogContext()
             .ReadFrom.Configuration(builder.Configuration));
 
+        string? connectionString = builder.Configuration.GetConnectionString("DMDDb");
+        builder.Services.AddDbContext<DMDContext>(options =>
+            options.UseSqlServer(connectionString));
+
         // Add services to the container.
         builder.Services.AddControllers();
 
@@ -31,6 +36,7 @@ class Program
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(DomainMarker).Assembly));
 
         // add request validation
+        builder.Services.AddValidatorsFromAssembly(typeof(DomainMarker).Assembly);
         builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         builder.Services.AddValidatorsFromAssembly(typeof(DomainMarker).Assembly);
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
