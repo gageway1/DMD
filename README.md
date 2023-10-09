@@ -1,2 +1,1 @@
-# MediatrImpl
-Implementation of Mediatr in .NET 7.0
+# Dotnet 7.0 Stuff
