@@ -38,7 +38,6 @@ class Program
         // add request validation
         builder.Services.AddValidatorsFromAssembly(typeof(DomainMarker).Assembly);
         builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-        builder.Services.AddValidatorsFromAssembly(typeof(DomainMarker).Assembly);
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
         // domain services
