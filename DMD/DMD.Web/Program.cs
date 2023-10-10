@@ -1,4 +1,5 @@
 using DMD.Data;
+using DMD.Data.Repositories;
 using DMD.Domain;
 using DMD.Domain.Middleware;
 using DMD.Web.Extensions;
@@ -24,6 +25,7 @@ class Program
         string? connectionString = builder.Configuration.GetConnectionString("DMDDb");
         builder.Services.AddDbContext<DMDContext>(options =>
             options.UseSqlServer(connectionString));
+        builder.Services.AddScoped<IUnitOfWork, DMDContext>();
 
         // Add services to the container.
         builder.Services.AddControllers();

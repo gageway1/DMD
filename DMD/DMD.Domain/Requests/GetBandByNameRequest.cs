@@ -1,10 +1,7 @@
-﻿using Azure.Core;
-using DMD.Data.Models;
+﻿using DMD.Data.Models;
 using DMD.Domain.Validation;
-using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
 
 namespace DMD.Domain.Requests
 {

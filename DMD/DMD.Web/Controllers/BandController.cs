@@ -42,19 +42,19 @@ namespace DMD.Web.Controllers
         [HttpPost("/createBand")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Band> CreateBandAsync([FromBody] CreateBandRequest request)
+        public async Task CreateBandAsync([FromBody] CreateBandRequest request)
         {
             _logger.LogInformation("Called bands/createBand");
-            return TinyMapper.Map<Data.Models.DbBand, Band>(await _mediator.Send(request));
+            await _mediator.Send(request);
         }
 
         [HttpPut("/modifyBand")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Band> ModifyBandAsync([FromBody] ModifyBandRequest request)
+        public async Task ModifyBandAsync([FromBody] ModifyBandRequest request)
         {
             _logger.LogInformation("Called bands/modifyBand");
-            return TinyMapper.Map<Data.Models.DbBand, Band>(await _mediator.Send(request));
+            await _mediator.Send(request);
         }
     }
 }

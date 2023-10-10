@@ -1,12 +1,10 @@
-﻿using DMD.Data.Models;
-using DMD.Domain.Validation;
+﻿using DMD.Domain.Validation;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
 
 namespace DMD.Domain.Requests
 {
-    public sealed partial class CreateBandRequest : IValidatableRequest<DbBand>
+    public sealed partial class CreateBandRequest : IValidatableRequest
     {
         public CreateBandRequest(string name, string genre)
         {

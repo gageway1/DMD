@@ -1,16 +1,10 @@
-﻿using DMD.Data.Models;
-using DMD.Domain.Validation;
+﻿using DMD.Domain.Validation;
 using FluentValidation;
 using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DMD.Domain.Requests
 {
-    public sealed partial class ModifyBandRequest : IValidatableRequest<DbBand>
+    public sealed partial class ModifyBandRequest : IValidatableRequest
     {
         public ModifyBandRequest(Guid id, string name, string genre, string modifiedBy)
         {

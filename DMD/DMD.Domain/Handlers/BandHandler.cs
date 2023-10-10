@@ -10,8 +10,8 @@ namespace DMD.Domain.Handlers
     internal sealed class BandHandler :
         IRequestHandler<GetAllBandsRequest, List<DbBand>>,
         IRequestHandler<GetBandByNameRequest, DbBand>,
-        IRequestHandler<CreateBandRequest, DbBand>,
-        IRequestHandler<ModifyBandRequest, DbBand>
+        IRequestHandler<CreateBandRequest>,
+        IRequestHandler<ModifyBandRequest>
     {
         private readonly IBandService _bandService;
         public BandHandler(IBandService bandService)
@@ -29,13 +29,13 @@ namespace DMD.Domain.Handlers
             return _bandService.GetBandByNameAsync(request.Name, cancellationToken);
         }
 
-        public Task<DbBand> Handle(CreateBandRequest request, CancellationToken cancellationToken)
+        public Task Handle(CreateBandRequest request, CancellationToken cancellationToken)
         {
 
             return _bandService.CreateBandAsync(request.Name, request.Genre, cancellationToken);
         }
 
-        public Task<DbBand> Handle(ModifyBandRequest request, CancellationToken cancellationToken)
+        public Task Handle(ModifyBandRequest request, CancellationToken cancellationToken)
         {
             return _bandService.ModifyBandAsync(request.Id, request.Name, request.Genre, request.ModifiedBy, cancellationToken);
         }
