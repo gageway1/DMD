@@ -5,7 +5,7 @@ using FluentValidation.Results;
 
 namespace DMD.Domain.Requests
 {
-    public sealed partial class GetAllBandsRequest : IValidatableRequest<List<DbBand>>
+    public sealed partial class GetAllBandsRequest : IValidatableRequest<IList<DbBand>>
     {
         public GetAllBandsRequest()
         {

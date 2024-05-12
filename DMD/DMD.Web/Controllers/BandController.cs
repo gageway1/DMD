@@ -23,11 +23,11 @@ namespace DMD.Web.Controllers
         }
 
         [HttpGet("/getAllBands")]
-        [ProducesResponseType(typeof(List<Band>), (int)HttpStatusCode.OK)]
-        public async Task<List<Band>> GetAllBandsAsync()
+        [ProducesResponseType(typeof(IList<Band>), (int)HttpStatusCode.OK)]
+        public async Task<IList<Band>> GetAllBandsAsync()
         {
             _logger.LogInformation("Called bands/getAllBands");
-            return TinyMapper.Map<List<Data.Models.DbBand>, List<Band>>(await _mediator.Send(new GetAllBandsRequest()));
+            return TinyMapper.Map<IList<Data.Models.DbBand>, IList<Band>>(await _mediator.Send(new GetAllBandsRequest()));
         }
 
         [HttpGet("/getBandByName")]

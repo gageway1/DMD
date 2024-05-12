@@ -8,7 +8,7 @@ using Nelibur.ObjectMapper;
 namespace DMD.Domain.Handlers
 {
     internal sealed class BandHandler :
-        IRequestHandler<GetAllBandsRequest, List<DbBand>>,
+        IRequestHandler<GetAllBandsRequest, IList<DbBand>>,
         IRequestHandler<GetBandByNameRequest, DbBand>,
         IRequestHandler<CreateBandRequest>,
         IRequestHandler<ModifyBandRequest>
@@ -19,7 +19,7 @@ namespace DMD.Domain.Handlers
             _bandService = bandService;
         }
 
-        public Task<List<DbBand>> Handle(GetAllBandsRequest request, CancellationToken cancellationToken)
+        public Task<IList<DbBand>> Handle(GetAllBandsRequest request, CancellationToken cancellationToken)
         {
             return _bandService.GetAllBandsAsync(cancellationToken);
         }

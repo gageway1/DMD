@@ -3,6 +3,7 @@ using DMD.Data.Repositories;
 using DMD.Domain;
 using DMD.Domain.Middleware;
 using DMD.Web.Extensions;
+using FluentAssertions.Common;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,6 @@ class Program
         string? connectionString = builder.Configuration.GetConnectionString("DMDDb");
         builder.Services.AddDbContext<DMDContext>(options =>
             options.UseSqlServer(connectionString));
-        builder.Services.AddScoped<IUnitOfWork, DMDContext>();
 
         // Add services to the container.
         builder.Services.AddControllers();
@@ -42,6 +42,9 @@ class Program
         builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
+        // add repositories
+        builder.Services.AddScoped<IBandRepository, BandRepository>();
+
         // domain services
         builder.Services.AddDomainServices(builder.Configuration);
 
@@ -49,6 +52,13 @@ class Program
         builder.Services.AddMapping();
 
         WebApplication app = builder.Build();
+
+        // Seeding database
+        using (var scope = app.Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<DMDContext>();
+            DBContextSeeding.SeedAsync(dbContext).Wait();
+        }
 
         app.Logger.LogInformation("Listening on:");
         foreach (string url in Environment.GetEnvironmentVariable("ASPNETCORE_URLS")!.Split(";"))

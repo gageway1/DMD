@@ -1,10 +1,11 @@
 ﻿using DMD.Data.Models;
+using DMD.Data.Repositories.Base;
 
 namespace DMD.Data.Repositories
 {
-    public interface IBandRepository : IDisposable
+    public interface IBandRepository : IRepository<DbBand>, IDisposable
     {
-        IAsyncEnumerable<DbBand> GetAllBandsAsync();
+        Task<IList<DbBand>> GetAllBandsAsync();
         Task<DbBand> GetBandByNameAsync(string bandName);
         Task<DbBand> GetBandByIdAsync(Guid bandId);
         Task InsertBandAsync(DbBand band);

@@ -37,7 +37,7 @@ namespace DMD.Test.ServiceTests
             // setup
 
             // act
-            List<DbBand> result = await _bandService.GetAllBandsAsync(CancellationToken.None);
+            IList<DbBand> result = await _bandService.GetAllBandsAsync(CancellationToken.None);
 
             // assert
             result.Should().NotBeNull();

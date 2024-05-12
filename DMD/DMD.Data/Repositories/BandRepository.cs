@@ -1,16 +1,18 @@
 ﻿using DMD.Data.Models;
+using DMD.Data.Repositories.Base;
 using DMD.Domain.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Collections;
 
 namespace DMD.Data.Repositories
 {
-    public class BandRepository : IBandRepository, IDisposable
+    public class BandRepository : Repository<DbBand>, IBandRepository, IDisposable
     {
         private readonly DMDContext _context;
         private readonly ILogger<BandRepository> _logger;
 
-        public BandRepository(DMDContext context, ILogger<BandRepository> logger)
+        public BandRepository(DMDContext context, ILogger<BandRepository> logger) : base(context)
         {
             _context = context;
             _logger = logger;
@@ -29,17 +31,16 @@ namespace DMD.Data.Repositories
             }
         }
 
-        public async IAsyncEnumerable<DbBand> GetAllBandsAsync()
+        public async Task<IList<DbBand>> GetAllBandsAsync()
         {
-            await foreach (var band in _context.Bands.AsAsyncEnumerable())
-            {
-                yield return band;
-            }
+            var query = await GetAllAsync(p => p.OrderByDescending(p => p.CreatedOn));
+            return await query.ToListAsync();
         }
 
         public async Task<DbBand> GetBandByIdAsync(Guid id)
         {
-            DbBand? band = await _context.Bands.FindAsync(id);
+            var q = await GetAsync(x => x.Id == id);
+            var band = q.First();
             if (band is not null)
             {
                 return band;
