@@ -6,7 +6,7 @@ namespace DMD.Web.Models
     {
         public string Name { get; set; } = string.Empty;
         public string Genre { get; set; } = string.Empty;
-        public IDictionary<string, Album> Albums { get; set; } = new Dictionary<string, Album>();
-        public IDictionary<string, BandMember> Members = new Dictionary<string, BandMember>();
+        public ICollection<Album> Albums { get; set; } = new List<Album>();
+        public ICollection<BandMember> BandMembers { get; set; } = new List<BandMember>();
     }
 }

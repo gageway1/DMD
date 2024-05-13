@@ -3,6 +3,7 @@
     public class Album : WebModelBase
     {
         public string Name { get; set; } = string.Empty;
-        public IDictionary<string, Song> Songs { get; set; } = new Dictionary<string, Song>();
+        public ICollection<Song> Songs { get; set; } = new List<Song>();
+        public Guid DbBandId { get; set; }
     }
 }

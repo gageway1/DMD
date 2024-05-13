@@ -1,38 +1,39 @@
 ﻿using DMD.Data.Models;
 using DMD.Web.Models;
 using Nelibur.ObjectMapper;
-using Nelibur.ObjectMapper.Bindings;
 
-namespace DMD.Web.Extensions
+public static class TinyMapperExtensions
 {
-    public static class MappingConfigurationExtensions
+    public static void ConfigureMappings()
     {
-        public static IServiceCollection AddMapping(this IServiceCollection services)
-        {
-            TinyMapperExtensions.BindForEnumerables<DbBand, Band>();
-            TinyMapperExtensions.BindForEnumerables<DbAlbum, Album>();
-            TinyMapperExtensions.BindForEnumerables<DbBandMember, BandMember>();
-            TinyMapperExtensions.BindForEnumerables<DbSong, Song>();
+        // Bind individual and enumerable types
+        TinyMapper.Bind<DbBand, Band>();
+        TinyMapper.Bind<IEnumerable<DbBand>, IEnumerable<Band>>();
+        TinyMapper.Bind<DbAlbum, Album>();
+        TinyMapper.Bind<IEnumerable<DbAlbum>, IEnumerable<Album>>();
+        TinyMapper.Bind<DbBandMember, BandMember>();
+        TinyMapper.Bind<IEnumerable<DbBandMember>, IEnumerable<BandMember>>();
+        TinyMapper.Bind<DbSong, Song>();
+        TinyMapper.Bind<IEnumerable<DbSong>, IEnumerable<Song>>();
 
-            return services;
-        }
+        // Bind complex objects within these mappings
+        TinyMapper.Bind<DbBand, Band>(config =>
+        {
+            config.Bind(source => source.Albums, target => target.Albums);
+            config.Bind(source => source.Members, target => target.BandMembers);
+        });
+        TinyMapper.Bind<DbAlbum, Album>(config =>
+        {
+            config.Bind(source => source.Songs, target => target.Songs);
+        });
     }
+}
 
-    public static class TinyMapperExtensions
+public static class MappingConfigurationExtensions
+{
+    public static IServiceCollection AddMapping(this IServiceCollection services)
     {
-        public static void BindForEnumerables<TFrom, TTo>(Action<IBindingConfig<TFrom, TTo>>? config = null)
-        {
-            if (config is not null)
-            {
-                TinyMapper.Bind(config);
-            }
-            else
-            {
-                TinyMapper.Bind<TFrom, TTo>();
-            }
-            TinyMapper.Bind<IEnumerable<TFrom>, IEnumerable<TTo>>();
-            TinyMapper.Bind<IList<TFrom>, IList<TTo>>();
-            TinyMapper.Bind<List<TFrom>, List<TTo>>();
-        }
+        TinyMapperExtensions.ConfigureMappings();
+        return services;
     }
 }

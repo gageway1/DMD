@@ -5,9 +5,7 @@ namespace DMD.Data.Repositories
 {
     public interface IBandRepository : IRepository<DbBand>, IDisposable
     {
-        Task<IList<DbBand>> GetAllBandsAsync();
-        Task<DbBand> GetBandByNameAsync(string bandName);
-        Task<DbBand> GetBandByIdAsync(Guid bandId);
+        Task<IEnumerable<DbBand>> GetAllBandsAsync();
         Task InsertBandAsync(DbBand band);
         void UpdateBand(DbBand band);
         Task DeleteBandAsync(Guid id);

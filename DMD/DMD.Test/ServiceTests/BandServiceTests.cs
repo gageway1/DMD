@@ -37,37 +37,11 @@ namespace DMD.Test.ServiceTests
             // setup
 
             // act
-            IList<DbBand> result = await _bandService.GetAllBandsAsync(CancellationToken.None);
+            IEnumerable<DbBand> result = await _bandService.GetAllBandsAsync(CancellationToken.None);
 
             // assert
             result.Should().NotBeNull();
-            result.Count.Should().BeGreaterThan(0);
-        }
-
-        [Fact]
-        public async Task GetBandByName_Succeeds()
-        {
-            // setup
-            string bandName = "metallica";
-
-            // act
-            DbBand result = await _bandService.GetBandByNameAsync(bandName, CancellationToken.None);
-
-            // assert
-            result.Should().NotBeNull();
-        }
-
-        [Fact]
-        public async Task GetBandByName_NonExistentName_Fails()
-        {
-            // setup
-            string bandName = "thisbanddoesnotexist";
-
-            // act
-            Task result() => _bandService.GetBandByNameAsync(bandName, CancellationToken.None);
-
-            // assert
-            await Assert.ThrowsAsync<InvalidOperationException>(result);
+            result.ToList().Count.Should().BeGreaterThan(0);
         }
     }
 }

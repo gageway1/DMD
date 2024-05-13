@@ -3,6 +3,7 @@
     public class DbAlbum : DbModelBase
     {
         public string Name { get; set; } = string.Empty;
-        public IList<DbSong> Songs { get; set; } = new List<DbSong>();
+        public ICollection<DbSong> Songs { get; set; } = new List<DbSong>();
+        public Guid DbBandId { get; set; }
     }
 }

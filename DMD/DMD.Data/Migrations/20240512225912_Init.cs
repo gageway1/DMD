@@ -12,22 +12,6 @@ namespace DMD.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "BandMembers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Instrument = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BandMembers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Bands",
                 columns: table => new
                 {
@@ -50,7 +34,7 @@ namespace DMD.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DbBandId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DbBandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -63,7 +47,31 @@ namespace DMD.Data.Migrations
                         name: "FK_Albums_Bands_DbBandId",
                         column: x => x.DbBandId,
                         principalTable: "Bands",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BandMembers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Instrument = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DbBandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    ModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BandMembers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BandMembers_Bands_DbBandId",
+                        column: x => x.DbBandId,
+                        principalTable: "Bands",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,7 +81,7 @@ namespace DMD.Data.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Length = table.Column<TimeSpan>(type: "time", nullable: false),
-                    DbAlbumId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DbAlbumId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     ModifiedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -86,12 +94,18 @@ namespace DMD.Data.Migrations
                         name: "FK_Songs_Albums_DbAlbumId",
                         column: x => x.DbAlbumId,
                         principalTable: "Albums",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Albums_DbBandId",
                 table: "Albums",
+                column: "DbBandId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BandMembers_DbBandId",
+                table: "BandMembers",
                 column: "DbBandId");
 
             migrationBuilder.CreateIndex(

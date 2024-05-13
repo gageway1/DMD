@@ -20,12 +20,7 @@ namespace DMD.Domain.Services
             _logger.LogInformation($"Options!:\n[{nameof(_options.Value.ApiKey)}] | {_options.Value.ApiKey}\n[{nameof(_options.Value.TenantId)}] | {_options.Value.TenantId}");
         }
 
-        public async Task<DbBand> GetBandByNameAsync(string bandName, CancellationToken cancellationToken)
-        {
-            return await _bandRepository.GetBandByNameAsync(bandName);
-        }
-
-        public async Task<IList<DbBand>> GetAllBandsAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<DbBand>> GetAllBandsAsync(CancellationToken cancellationToken)
         {            
             return await _bandRepository.GetAllBandsAsync();
         }
@@ -33,12 +28,6 @@ namespace DMD.Domain.Services
         public async Task CreateBandAsync(string name, string genre, CancellationToken cancellationToken)
         {
             await _bandRepository.InsertBandAsync(new DbBand() { Genre = genre, Name = name });
-        }
-
-        public async Task ModifyBandAsync(Guid id, string name, string genre, string modifiedBy, CancellationToken cancellationToken)
-        {
-            DbBand band = await _bandRepository.GetBandByIdAsync(id);
-            _bandRepository.UpdateBand(band);
         }
     }
 }

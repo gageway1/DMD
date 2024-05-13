@@ -1,3 +1,4 @@
+using DMD.Data.Models;
 using DMD.Domain.Requests;
 using DMD.Web.Models;
 using MediatR;
@@ -23,20 +24,11 @@ namespace DMD.Web.Controllers
         }
 
         [HttpGet("/getAllBands")]
-        [ProducesResponseType(typeof(IList<Band>), (int)HttpStatusCode.OK)]
-        public async Task<IList<Band>> GetAllBandsAsync()
+        [ProducesResponseType(typeof(IEnumerable<Band>), (int)HttpStatusCode.OK)]
+        public async Task<IEnumerable<DbBand>> GetAllBandsAsync()
         {
             _logger.LogInformation("Called bands/getAllBands");
-            return TinyMapper.Map<IList<Data.Models.DbBand>, IList<Band>>(await _mediator.Send(new GetAllBandsRequest()));
-        }
-
-        [HttpGet("/getBandByName")]
-        [ProducesResponseType(typeof(Band), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<Band> GetBandByNameAsync([FromQuery] string name)
-        {
-            _logger.LogInformation("Called bands/getBandByName");
-            return TinyMapper.Map<Data.Models.DbBand, Band>(await _mediator.Send(new GetBandByNameRequest(name)));
+            return await _mediator.Send(new GetAllBandsRequest());
         }
 
         [HttpPost("/createBand")]
@@ -45,15 +37,6 @@ namespace DMD.Web.Controllers
         public async Task CreateBandAsync([FromBody] CreateBandRequest request)
         {
             _logger.LogInformation("Called bands/createBand");
-            await _mediator.Send(request);
-        }
-
-        [HttpPut("/modifyBand")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task ModifyBandAsync([FromBody] ModifyBandRequest request)
-        {
-            _logger.LogInformation("Called bands/modifyBand");
             await _mediator.Send(request);
         }
     }

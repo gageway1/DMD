@@ -35,7 +35,7 @@ namespace DMD.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("DbBandId")
+                    b.Property<Guid>("DbBandId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ModifiedBy")
@@ -102,6 +102,9 @@ namespace DMD.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<Guid>("DbBandId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Instrument")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,6 +117,8 @@ namespace DMD.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DbBandId");
 
                     b.ToTable("BandMembers");
                 });
@@ -131,7 +136,7 @@ namespace DMD.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<Guid?>("DbAlbumId")
+                    b.Property<Guid>("DbAlbumId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<TimeSpan>("Length")
@@ -159,14 +164,27 @@ namespace DMD.Data.Migrations
                 {
                     b.HasOne("DMD.Data.Models.DbBand", null)
                         .WithMany("Albums")
-                        .HasForeignKey("DbBandId");
+                        .HasForeignKey("DbBandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DMD.Data.Models.DbBandMember", b =>
+                {
+                    b.HasOne("DMD.Data.Models.DbBand", null)
+                        .WithMany("Members")
+                        .HasForeignKey("DbBandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DMD.Data.Models.DbSong", b =>
                 {
                     b.HasOne("DMD.Data.Models.DbAlbum", null)
                         .WithMany("Songs")
-                        .HasForeignKey("DbAlbumId");
+                        .HasForeignKey("DbAlbumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DMD.Data.Models.DbAlbum", b =>
@@ -177,6 +195,8 @@ namespace DMD.Data.Migrations
             modelBuilder.Entity("DMD.Data.Models.DbBand", b =>
                 {
                     b.Navigation("Albums");
+
+                    b.Navigation("Members");
                 });
 #pragma warning restore 612, 618
         }

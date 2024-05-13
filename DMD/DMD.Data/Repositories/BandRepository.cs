@@ -20,58 +20,69 @@ namespace DMD.Data.Repositories
 
         public async Task DeleteBandAsync(Guid id)
         {
-            DbBand? band = await _context.Bands.FindAsync(id);
-            if (band is not null)
+            try
             {
-                _context.Bands.Remove(band);
+                DbBand? band = await _context.Bands.FindAsync(id);
+                if (band is not null)
+                {
+                    _context.Bands.Remove(band);
+                }
+                else
+                {
+                    throw new NotFoundInDbException($"No band found with ID [{id}]");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new NotFoundInDbException($"No band found with ID [{id}]");
-            }
-        }
-
-        public async Task<IList<DbBand>> GetAllBandsAsync()
-        {
-            var query = await GetAllAsync(p => p.OrderByDescending(p => p.CreatedOn));
-            return await query.ToListAsync();
-        }
-
-        public async Task<DbBand> GetBandByIdAsync(Guid id)
-        {
-            var q = await GetAsync(x => x.Id == id);
-            var band = q.First();
-            if (band is not null)
-            {
-                return band;
-            }
-            else
-            {
-                throw new NotFoundInDbException($"No band found with ID [{id}]");
+                _logger.LogError($"Exception caught in [DeleteBandAsync]: Exception: \n{ex.InnerException}\nStack Trace:\n{ex.StackTrace}");
             }
         }
 
-        public async Task<DbBand> GetBandByNameAsync(string bandName)
+        public async Task<IEnumerable<DbBand>> GetAllBandsAsync()
         {
-            DbBand? band = await _context.Bands.FirstAsync(b => b.Name == bandName);
-            if (band is not null)
+            try
             {
-                return band;
+                var query = await GetAllAsync(p => p
+                .Include(p => p.Members)
+                .Include(p => p.Albums)
+                    .ThenInclude(x => x.Songs)
+                .OrderByDescending(p => p.CreatedOn));
+                return await query.ToListAsync();
             }
-            else
+            catch (Exception ex)
             {
-                throw new NotFoundInDbException($"No band found with ID [{bandName}]");
+                _logger.LogError($"Exception caught in [GetAllBandsAsync]: Exception: \n{ex.InnerException}\nStack Trace:\n{ex.StackTrace}");
+                return new List<DbBand>();
             }
         }
 
         public async Task InsertBandAsync(DbBand band)
         {
-            await _context.Bands.AddAsync(band);
+            try
+            {
+                await _context.Bands.AddAsync(band);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception caught in [InsertBandAsync]: Exception: \n{ex.InnerException}\nStack Trace:\n{ex.StackTrace}");
+            }
         }
 
-        public void UpdateBand(DbBand band)
+        public async void UpdateBand(DbBand band)
         {
-            _context.Entry(band).State = EntityState.Modified;
+            try
+            {
+                var b = await _context.Bands.Where(p => p.Id == band.Id).FirstOrDefaultAsync();
+                b = band;
+                _context.Entry(b).State = EntityState.Modified;
+                _context.Bands.Update(b);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception caught in [UpdateBand]: Exception: \n{ex.InnerException}\nStack Trace:\n{ex.StackTrace}");
+            }
         }
 
         private bool disposed = false;

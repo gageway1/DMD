@@ -27,14 +27,6 @@ namespace DMD.Data.Repositories.Base
         }
 
         public async Task<IQueryable<T>> GetAllAsync(Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null)
-        {
-            IQueryable<T> query = _dbSet;
-
-            if (orderBy != null)
-            {
-                _ = orderBy(query);
-            }
-            return query;
-        }
+            => orderBy != null ? orderBy(_dbSet) : _dbSet;
     }
 }
