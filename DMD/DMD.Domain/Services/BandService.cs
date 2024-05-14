@@ -21,7 +21,7 @@ namespace DMD.Domain.Services
         }
 
         public async Task<IEnumerable<DbBand>> GetAllBandsAsync(CancellationToken cancellationToken)
-        {            
+        {
             return await _bandRepository.GetAllBandsAsync();
         }
 
