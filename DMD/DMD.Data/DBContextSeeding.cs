@@ -33,7 +33,7 @@ namespace DMD.Data
                     }
                 };
 
-                context.AddRange(bands);
+                context.Bands.AddRange(bands);
                 await context.SaveChangesAsync();
 
                 var band = await context.Bands.FirstAsync();
@@ -166,20 +166,6 @@ namespace DMD.Data
                 context.Albums.Update(album);
                 await context.SaveChangesAsync();
             }
-        }
-
-        public static async Task<T> SaveEntity<T>(DMDContext context, T entity) where T : class
-        {
-            await context.Set<T>().AddAsync(entity);
-            await context.SaveChangesAsync();
-            return entity;
-        }
-
-        public static async Task<IList<T>> SaveEntityRangeAsync<T>(DMDContext context, IList<T> entities) where T : class
-        {
-            await context.Set<T>().AddRangeAsync(entities);
-            await context.SaveChangesAsync();
-            return entities;
         }
     }
 }

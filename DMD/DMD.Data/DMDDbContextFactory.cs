@@ -10,7 +10,7 @@ namespace DMD.Data
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
                    .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile(@Directory.GetCurrentDirectory() + "/../DMD.Web/appsettings.json")
+                   .AddJsonFile(Directory.GetCurrentDirectory() + "/../DMD.Web/appsettings.json")
                    .Build();
 
             DbContextOptionsBuilder<DMDContext> optionsBuilder = new();
